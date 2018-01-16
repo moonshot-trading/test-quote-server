@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"time"
 	"bytes"
 	"strings"
+	"strconv"
+	"math/rand"
 )
 
 const (
@@ -29,8 +32,14 @@ func quoteHandler(conn net.Conn) {
 	commandLength := bytes.Index(buffer, []byte{0})
 	commandText := string(buffer[:commandLength - 1])
 	stock := strings.Split(commandText, ",")[0]
-	fmt.Println(stock)
-	
+
+	if price, exists := stockPrice[stock]; exists {
+		conn.Write([]byte(strconv.Itoa(price)))
+	} else {
+		stockPrice[stock] = rand.Intn(1000 - 20) + 20
+		conn.Write([]byte(strconv.Itoa(stockPrice[stock])))
+	}
+
 	conn.Close()
 }
 
@@ -41,6 +50,8 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+
+	rand.Seed(time.Now().Unix())
 
 	for {
 		conn, err := l.Accept()
