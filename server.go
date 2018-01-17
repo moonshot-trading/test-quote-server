@@ -31,14 +31,19 @@ func quoteHandler(conn net.Conn) {
 
 	commandLength := bytes.Index(buffer, []byte{0})
 	commandText := string(buffer[:commandLength - 1])
-	stock := strings.Split(commandText, ",")[0]
+	commandComponents := strings.Split(commandText, ",")
+	stock := commandComponents[0]
+	userId := commandComponents[1]
 
-	if price, exists := stockPrice[stock]; exists {
-		conn.Write([]byte(strconv.Itoa(price)))
-	} else {
+	if _, exists := stockPrice[stock]; !exists {
 		stockPrice[stock] = rand.Intn(1000 - 20) + 20
-		conn.Write([]byte(strconv.Itoa(stockPrice[stock])))
 	}
+	
+	responseString := strconv.Itoa(stockPrice[stock]) + ","
+	responseString += stock + "," + userId + ","
+	responseString += strconv.Itoa(int(time.Now().Unix())) + ","
+	responseString += strconv.Itoa(rand.Intn(99999999 - 10000000) + 10000000)
+	conn.Write([]byte(responseString))
 
 	conn.Close()
 }
