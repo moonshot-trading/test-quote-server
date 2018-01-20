@@ -32,8 +32,8 @@ func quoteHandler(conn net.Conn) {
 	commandLength := bytes.Index(buffer, []byte{0})
 	commandText := string(buffer[:commandLength - 1])
 	commandComponents := strings.Split(commandText, ",")
-	stock := commandComponents[0]
-	userId := commandComponents[1]
+	userId := commandComponents[0]
+	stock := commandComponents[1]
 
 	if _, exists := stockPrice[stock]; !exists {
 		stockPrice[stock] = rand.Intn(1000 - 20) + 20
