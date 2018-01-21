@@ -18,7 +18,7 @@ const (
 )
 
 var (
-	stockPrice = make(map[string]int)
+	stockPrice = make(map[string]float64)
 )
 
 func quoteHandler(conn net.Conn) {
@@ -36,10 +36,10 @@ func quoteHandler(conn net.Conn) {
 	stock := commandComponents[1]
 
 	if _, exists := stockPrice[stock]; !exists {
-		stockPrice[stock] = rand.Intn(1000 - 20) + 20
+		stockPrice[stock] = (rand.Float64() * 1000) + 1
 	}
 	
-	responseString := strconv.Itoa(stockPrice[stock]) + ","
+	responseString := strconv.FormatFloat(stockPrice[stock], 'f', 2, 64) + ","
 	responseString += stock + "," + userId + ","
 	responseString += strconv.Itoa(int(time.Now().Unix())) + ","
 	responseString += strconv.Itoa(rand.Intn(99999999 - 10000000) + 10000000)
