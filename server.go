@@ -38,10 +38,10 @@ func quoteHandler(conn net.Conn) {
 	if _, exists := stockPrice[stock]; !exists {
 		stockPrice[stock] = (rand.Float64() * 1000) + 1
 	}
-	
+
 	responseString := strconv.FormatFloat(stockPrice[stock], 'f', 2, 64) + ","
 	responseString += stock + "," + userId + ","
-	responseString += strconv.Itoa(int(time.Now().Unix())) + ","
+	responseString += strconv.FormatInt(int64(time.Nanosecond) * int64(time.Now().UnixNano()) / int64(time.Millisecond), 10) + ","
 	responseString += strconv.Itoa(rand.Intn(99999999 - 10000000) + 10000000)
 	conn.Write([]byte(responseString))
 
