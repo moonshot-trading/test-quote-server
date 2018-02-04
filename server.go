@@ -1,14 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"math/rand"
 	"net"
 	"os"
-	"time"
-	"bytes"
-	"strings"
 	"strconv"
-	"math/rand"
+	"strings"
+	"time"
 )
 
 const (
@@ -30,10 +30,10 @@ func quoteHandler(conn net.Conn) {
 	}
 
 	commandLength := bytes.Index(buffer, []byte{0})
-	commandText := string(buffer[:commandLength - 1])
+	commandText := string(buffer[:commandLength-1])
 	commandComponents := strings.Split(commandText, ",")
-	userId := commandComponents[0]
-	stock := commandComponents[1]
+	stock := commandComponents[0]
+	userId := commandComponents[1]
 
 	if _, exists := stockPrice[stock]; !exists {
 		stockPrice[stock] = (rand.Float64() * 1000) + 1
@@ -41,8 +41,8 @@ func quoteHandler(conn net.Conn) {
 
 	responseString := strconv.FormatFloat(stockPrice[stock], 'f', 2, 64) + ","
 	responseString += stock + "," + userId + ","
-	responseString += strconv.FormatInt(int64(time.Nanosecond) * int64(time.Now().UnixNano()) / int64(time.Millisecond), 10) + ","
-	responseString += strconv.Itoa(rand.Intn(99999999 - 10000000) + 10000000)
+	responseString += strconv.FormatInt(int64(time.Nanosecond)*int64(time.Now().UnixNano())/int64(time.Millisecond), 10) + ","
+	responseString += strconv.Itoa(rand.Intn(99999999-10000000) + 10000000)
 	conn.Write([]byte(responseString))
 
 	conn.Close()
