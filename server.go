@@ -56,6 +56,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println("listening on " + CONN_HOST+":"+CONN_PORT)
+
 	rand.Seed(time.Now().Unix())
 
 	for {
