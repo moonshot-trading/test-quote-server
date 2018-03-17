@@ -51,7 +51,7 @@ func quoteHandler(conn net.Conn) {
 func main() {
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
-		fmt.Println("Cannot listen on port: %s", CONN_PORT)
+		fmt.Println("Cannot listen on port: ", CONN_PORT)
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
