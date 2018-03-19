@@ -9,4 +9,3 @@ RUN go get github.com/moonshot-trading/test-quote-server
 RUN go install github.com/moonshot-trading/test-quote-server
 
 ENTRYPOINT /go/bin/test-quote-server
-EXPOSE 44415

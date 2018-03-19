@@ -13,7 +13,7 @@ import (
 
 const (
 	CONN_HOST = "localhost"
-	CONN_PORT = "44415"
+	CONN_PORT = "8081"
 	CONN_TYPE = "tcp"
 )
 
@@ -49,7 +49,7 @@ func quoteHandler(conn net.Conn) {
 }
 
 func main() {
-	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
+	l, err := net.Listen(CONN_TYPE, ":"+CONN_PORT)
 	if err != nil {
 		fmt.Println("Cannot listen on port: ", CONN_PORT)
 		fmt.Println(err.Error())
