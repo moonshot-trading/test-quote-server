@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -19,6 +20,7 @@ const (
 
 var (
 	stockPrice = make(map[string]float64)
+	lock       = sync.RWMutex{}
 )
 
 func quoteHandler(conn net.Conn) {
@@ -35,9 +37,13 @@ func quoteHandler(conn net.Conn) {
 	stock := commandComponents[0]
 	userId := commandComponents[1]
 
+	lock.Lock()
+
 	if _, exists := stockPrice[stock]; !exists {
 		stockPrice[stock] = (rand.Float64() * 1000) + 1
 	}
+
+	lock.Unlock()
 
 	responseString := strconv.FormatFloat(stockPrice[stock], 'f', 2, 64) + ","
 	responseString += stock + "," + userId + ","
@@ -56,7 +62,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("listening on " + CONN_HOST+":"+CONN_PORT)
+	fmt.Println("listening on " + CONN_HOST + ":" + CONN_PORT)
 
 	rand.Seed(time.Now().Unix())
 
